@@ -97,6 +97,9 @@ contract UniswapV2Swap {
     }
 
     //Todo: Swap DAI -> WETH -> USDC
+    /*
+    swapMultiHopExactAmountOut: This function is similar to swapMultiHopExactAmountIn, but the user specifies the desired amount of USDC they want to receive instead of the amount of DAI they want to spend. The function transfers the maximum amount of DAI the user is willing to spend to the contract and approves the Uniswap V2 Router to access it. The function then calls swapTokensForExactTokens on the router to execute the swap, passing the user's desired amount of USDC, the maximum amount of DAI they are willing to spend, the token addresses for DAI, WETH, and USDC, the user's address, and the current block's timestamp as arguments. The function returns the amount of USDC received from the swap, and if the amount of DAI spent is less than the maximum amount the user was willing to spend, the contract refunds the difference to the user.  
+   */
     function swapMultiHopExactAmountOut(
         uint256 amountOutDesired,
         uint256 amountInMax
@@ -125,3 +128,14 @@ contract UniswapV2Swap {
         return amounts[2];
     }
 }
+
+//Note: Swap WETH -> DAI (Both the cases). But first one: You specify your desied amountIn(WETH in this case), and in second one you specify your desired amountOut(DAI in this case)
+
+/* Note: The Uniswap Router is a periphery contract which means that it's not strictly necessary. But still you should use it due to the fact that it protects you against various kinds of attacks on your trades.
+
+One of the attack vectors is frontrunning your trades. That means you enter your trade, some bot notices it in the Ethereum mempool (before it's executed), creates their own trade which gets executed before your trade and their trade makes your trade less profitable for you.
+
+To prevent this kinds of attacks the router provides various mechanisms; one of them is that amountoutmin. You could just send X amount of Eth to Uniswap and say "give me the maximum amount of tokens for this amount of Eth I give you" but that would be suspectible to frontrunning attacks. So you also need to specify how many tokens you want at minimum with amountoutmin. If the trading price has shifted too much between when you send the transaction and when it gets executed your trade gets reverted.
+
+So you have to know in advance how many tokens you'd like to get, at minimum.
+*/
