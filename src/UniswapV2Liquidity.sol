@@ -46,6 +46,7 @@ contract UniswapV2Liquidity {
 
         IERC20(pair).approve(ROUTER, liquidity);
 
+    
         (uint256 amountA, uint256 amountB ) = IUniswapV2Router(ROUTER).removeLiquidity(_tokenA, _tokenB, liquidity,  1,1,address(this), block.timestamp) ;
     }
 }

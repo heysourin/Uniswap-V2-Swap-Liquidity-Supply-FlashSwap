@@ -22,9 +22,11 @@ contract UniswapV2SwapTest is Test {
         assertTrue(true);
     }
 
+    //Todo: TEST: Swap WETH to DAI (WETH in DAI out):
     function testSwapSingleHopExactAmountIn() public {
         uint wethAmount = 10 ** 18;
-        weth.deposit{value: wethAmount}();
+
+        weth.deposit{value: wethAmount}(); //Solidity "send" operator (curly braces {}) used to send the ETH to the contract.
         weth.approve(address(uni), wethAmount);
 
         uint256 daiAmountMin = 1;
@@ -37,7 +39,76 @@ contract UniswapV2SwapTest is Test {
         assertGe(daiAmountOut, daiAmountMin, "amount out < min");
     }
 
+    // Swap DAI -> WETH -> USDC
+    function testSwapMultiHopExactAmountIn() public {
+        //Swap WETH -> DAI
+        uint256 wethAmount = 10 ** 18;
+        weth.deposit{value: wethAmount}();
+        weth.approve(address(uni), wethAmount);
+
+        uint256 daiAmountMin = 1;
+        uni.swapSingleHopExactAmountIn(wethAmount, daiAmountMin);
+
+        //Swap DAI -> WETH -> USDC
+        uint256 daiAmountIn = 10 ** 18;
+        dai.approve(address(uni), daiAmountIn);
+
+        uint256 usdcAmountOutMin = 1;
+
+        uint256 usdcAmountOut = uni.swapMultiHopExactAmountIn(
+            daiAmountIn,
+            usdcAmountOutMin
+        );
+
+        console.log("USDC", usdcAmountOut);
+        assertGe(usdcAmountOut, usdcAmountOutMin, "Amount out < min");
+    }
+
+    // Swap WETH -> DAI
+    function testSwapSingleHopExactAmountOut() public {
+        uint wethAmount = 1e18;
+        weth.deposit{value: wethAmount}();
+        weth.approve(address(uni), wethAmount);
+
+        uint daiAmountDesired = 1e18;
+        uint daiAmountOut = uni.swapSingleHopExactAmountOut(
+            daiAmountDesired,
+            wethAmount
+        );
+
+        console.log("DAI", daiAmountOut);
+        assertEq(
+            daiAmountOut,
+            daiAmountDesired,
+            "amount out != amount out desired"
+        );
+    }
+
+    // Swap DAI -> WETH -> USDC
+    function testSwapMultiHopExactAmountOut() public {
+        // Swap WETH -> DAI
+        uint wethAmount = 1e18;
+        weth.deposit{value: wethAmount}();
+        weth.approve(address(uni), wethAmount);
+
+        // Buy 100 DAI
+        uint daiAmountOut = 100 * 1e18;
+        uni.swapSingleHopExactAmountOut(daiAmountOut, wethAmount);
+
         // Swap DAI -> WETH -> USDC
+        dai.approve(address(uni), daiAmountOut);
 
+        uint amountOutDesired = 1e6;
+        uint amountOut = uni.swapMultiHopExactAmountOut(
+            amountOutDesired,
+            daiAmountOut
+        );
+
+        console.log("USDC", amountOut);
+        assertEq(
+            amountOut,
+            amountOutDesired,
+            "amount out != amount out desired"
+        );
+    }
 }
-
