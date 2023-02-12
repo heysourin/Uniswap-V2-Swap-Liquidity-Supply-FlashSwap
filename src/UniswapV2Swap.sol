@@ -16,7 +16,10 @@ contract UniswapV2Swap {
     IERC20 private dai = IERC20(DAI);
 
     //Todo: Swap WETH to DAI (WETH in DAI out):
-    /*`swapSingleHopExactAmountIn`: This function swaps WETH for DAI. The user specifies the amount of WETH they want to spend and the minimum amount of DAI they expect(amountOutMin) to receive. The function transfers the specified amount of WETH from the user to the CONTRACT and approves the Uniswap V2 Router to access it. The function then calls swapExactTokensForTokens on the router to execute the swap, passing the user's desired amounts, the token addresses for WETH and DAI, the user's address, and the current block's timestamp as arguments. The function returns the amount of DAI received from the swap.*/
+    /*`swapSingleHopExactAmountIn`: This function swaps WETH for DAI. The user specifies the amount of WETH they want to spend and the minimum amount of DAI they
+     expect(amountOutMin) to receive. The function transfers the specified amount of WETH from the user to the CONTRACT and approves the Uniswap V2 Router to access it.
+     The function then calls swapExactTokensForTokens on the router to execute the swap, passing the user's desired amounts, the token addresses for WETH and DAI, the user's
+     address, and the current block's timestamp as arguments. The function returns the amount of DAI received from the swap.*/
     function swapSingleHopExactAmountIn(
         uint256 amountIn,
         uint256 amountOutMin
