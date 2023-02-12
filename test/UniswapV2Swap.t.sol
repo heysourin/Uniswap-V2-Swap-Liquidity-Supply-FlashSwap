@@ -29,24 +29,25 @@ contract UniswapV2SwapTest is Test {
         weth.deposit{value: wethAmount}(); //Solidity "send" operator (curly braces {}) used to send the ETH to the contract.
         weth.approve(address(uni), wethAmount);
 
-        uint256 daiAmountMin = 1;
+        uint256 daiAmountMin = 1; //amountOutMin~ we expect to receive
+
         uint256 daiAmountOut = uni.swapSingleHopExactAmountIn(
-            wethAmount,
-            daiAmountMin
+            wethAmount, // amountIn
+            daiAmountMin //amountOutMin
         );
 
         // console.log("DAI", daiAmountOut);
-        assertGe(daiAmountOut, daiAmountMin, "amount out < min");
+        assertGe(daiAmountOut, daiAmountMin, "amount out < min"); // we have set minAmountOut so we are obviously getting that but we may get even greater than that.
     }
 
     // Swap DAI -> WETH -> USDC
     function testSwapMultiHopExactAmountIn() public {
         //Swap WETH -> DAI
-        uint256 wethAmount = 10 ** 18;
+        uint256 wethAmount = 10 ** 18; //1 ether
         weth.deposit{value: wethAmount}();
         weth.approve(address(uni), wethAmount);
 
-        uint256 daiAmountMin = 1;
+        uint256 daiAmountMin = 1; //1 wei
         uni.swapSingleHopExactAmountIn(wethAmount, daiAmountMin);
 
         //Swap DAI -> WETH -> USDC
