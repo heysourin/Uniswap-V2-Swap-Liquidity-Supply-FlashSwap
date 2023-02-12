@@ -24,8 +24,8 @@ contract UniswapV2Swap {
         uint256 amountIn,
         uint256 amountOutMin
     ) external returns (uint256 amountOut) {
-        weth.transferFrom(msg.sender, address(this), amountIn);
-        weth.approve(address(router), amountIn);
+        weth.transferFrom(msg.sender, address(this), amountIn);// transferFrom(ownerAddress, toAddress, amount)
+        weth.approve(address(router), amountIn);//approve(spender, amount); 
 
         address[] memory path = new address[](2);
         path[0] = WETH;
@@ -53,7 +53,6 @@ contract UniswapV2Swap {
         uint256 amountIn,
         uint256 amountOutMin
     ) external returns (uint256 amountOut) {
-        //todo: WETH <-> DAI
         dai.transferFrom(msg.sender, address(this), amountIn);
         dai.approve(address(router), amountIn);
 
@@ -70,11 +69,11 @@ contract UniswapV2Swap {
             block.timestamp
         );
 
-        return amounts[2];
+        return amounts[2];//USDC received from the swap
     }
 
     //Todo: Swap WETH to DAI(WETH in DAI out)
-    /* swapSingleHopExactAmountOut: This function is similar to swapSingleExactAmountIn, but the user specifies the desired amount of DAI they want to receive instead of the amount of WETH they
+    /* swapSingleHopExactAmountOut: This function is similar to swapSingleExactAmountIn, but the user specifies the desired amount of DAI they want to receive instead of the amount of WETH they 
     want to spend. The function transfers the maximum amount of WETH the user is willing to spend to the contract and approves the Uniswap V2 Router to access it. The function then calls 
     swapTokensForExactTokens on the router to execute the swap, passing the user's desired amount of DAI, the maximum amount of WETH they are willing to spend, the token addresses for WETH and DAI,
     the user's address, and the current block's timestamp as arguments. The function returns the amount of DAI received from the swap, and if the amount of WETH spent is less than the maximum amount
