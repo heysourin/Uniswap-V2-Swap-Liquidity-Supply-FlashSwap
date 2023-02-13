@@ -24,8 +24,8 @@ contract UniswapV2Swap {
         uint256 amountIn,
         uint256 amountOutMin
     ) external returns (uint256 amountOut) {
-        weth.transferFrom(msg.sender, address(this), amountIn);// transferFrom(ownerAddress, toAddress, amount)
-        weth.approve(address(router), amountIn);//approve(spender, amount); 
+        weth.transferFrom(msg.sender, address(this), amountIn); // transferFrom(ownerAddress, toAddress, amount)
+        weth.approve(address(router), amountIn); //approve(spender, amount);
 
         address[] memory path = new address[](2);
         path[0] = WETH;
@@ -69,7 +69,7 @@ contract UniswapV2Swap {
             block.timestamp
         );
 
-        return amounts[2];//USDC received from the swap
+        return amounts[2]; //USDC received from the swap
     }
 
     //Todo: Swap WETH to DAI(WETH in DAI out)
