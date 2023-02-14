@@ -69,7 +69,7 @@ contract UniswapV2Swap {
             block.timestamp
         );
 
-        return amounts[2]; //USDC received from the swap
+        return amounts[2];  //USDC received from the swap
     }
 
     //Todo: Swap WETH to DAI(WETH in DAI out)
